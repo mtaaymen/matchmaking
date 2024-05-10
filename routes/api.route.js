@@ -4,6 +4,13 @@ const fs = require('fs')
 
 router.get( '/matchmaking', async (req, res) => {
 
+    const testUser = await fetch("https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=632C53880F39AFB26BA95DF9AF0C6E51&vanityurl=236824809")
+    .then( res => res.json() )
+    .catch( err => {
+        console.log(err)
+    } )
+    console.log('testUser:', testUser)
+
     let codes
     try {
         const codesJson = fs.readFileSync('./codes.json', 'utf8')
@@ -24,10 +31,7 @@ router.get( '/matchmaking', async (req, res) => {
                 userError = true
             } )
 
-        console.log(steamUser)
-
         if( userError || !steamUser?.length ) continue
-
 
         const newTime = new Date(code.time)
 
@@ -37,8 +41,6 @@ router.get( '/matchmaking', async (req, res) => {
             time: newTime.getTime()
         })
     }
-
-    console.log('newCodes:', newCodes)
 
     res.status(200).send(newCodes)
 })
