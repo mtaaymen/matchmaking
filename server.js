@@ -10,38 +10,6 @@ const path = require('path')
 const mime = require('mime-types')
 
 const httpServer = http.createServer(app)
-const reactServer = http.createServer((req, res) => {
-    let filePath = path.resolve(__dirname, 'build', decodeURIComponent(req.url.slice(1)))
-  
-    if (filePath === path.resolve(__dirname, 'build')) {
-        filePath = path.join(filePath, 'index.html')
-    }
-  
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                const indexFilePath = path.join(path.resolve(__dirname, 'build'), 'index.html')
-                fs.readFile(indexFilePath, (err, indexData) => {
-                    if (err) {
-                        res.writeHead(404)
-                        res.end('404 Not Found')
-                    } else {
-                        res.writeHead(200, { 'Content-Type': 'text/html' });
-                        res.end(indexData);
-                    }
-                })
-            } else {
-                res.writeHead(500)
-                res.end('500 Internal Server Error')
-            }
-        } else {
-            const contentType = mime.contentType(path.extname(filePath)) || 'application/octet-stream';
-  
-            res.writeHead(200, { 'Content-Type': contentType })
-            res.end(data)
-        }
-    })
-})
 
 const corsOptions = {
     "origin": [config.CLIENT_URL, "http://localhost:3000"],
@@ -62,15 +30,15 @@ app.use( bodyParser.urlencoded({ extended: true }) )
 app.use( cookieParser() )
 app.use( cors(corsOptions) )
 app.use( express.static( __dirname + '/public' ) )
+app.use( express.static( path.resolve(__dirname, './build')) )
 
 const apiRoute = require('./routes/api.route')
 
 app.use( '/api', apiRoute )
+app.use('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './build', 'index.html'));
+})
 
 httpServer.listen( config.PORT, () => {
     console.log(`Listening on port ${config.PORT}.`)
-})
-
-reactServer.listen( config.CLIENT_PORT, () => {
-    console.log(`Listening on port ${config.CLIENT_PORT}.`)
 })
