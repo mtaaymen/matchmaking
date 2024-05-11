@@ -8,6 +8,7 @@ const cookieParser = require( 'cookie-parser' )
 const config = require('./config')
 const path = require('path')
 const mime = require('mime-types')
+const requestIp = require('request-ip');
 
 const httpServer = http.createServer(app)
 
@@ -31,6 +32,7 @@ app.use( cookieParser() )
 app.use( cors(corsOptions) )
 app.use( express.static( __dirname + '/public' ) )
 app.use( express.static( path.resolve(__dirname, './build')) )
+app.use(requestIp.mw())
 
 const apiRoute = require('./routes/api.route')
 

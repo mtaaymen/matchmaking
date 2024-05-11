@@ -1,6 +1,6 @@
 const config = {
     CLIENT_URL: "https://matchmaking-db96.onrender.com",
-    PORT: 3000,
+    PORT: 6969,
     CLIENT_PORT: 3000
 }
 

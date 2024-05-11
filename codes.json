@@ -1,14 +1,5 @@
-[
-    {
-        "type": "premier",
-        "region": "EU",
-        "cheat": "other",
-        "lobby": "any",
-        "code": "TEST CODE",
-        "minELO": 30000,
-        "time": "05/10/2024 9:30 AM",
-        "user": {
-            "steamid": "76561198197090537"
-        }
-    }
-]
+{
+  "codes": [
+
+  ]
+}
